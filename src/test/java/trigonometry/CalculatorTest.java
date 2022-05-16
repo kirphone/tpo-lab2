@@ -78,8 +78,8 @@ public class CalculatorTest {
     @Test
     void tanNanTest(){
         TrigonometricPart trigonometricPart1 = new TrigonometricPart(0.1);
-        assertEquals(Double.NaN, trigonometricPart1.calculateTg(PI/2.0));
-        assertEquals(Double.NaN, trigonometricPart1.calculateTg(-PI/2.0));
+        assertEquals(Double.POSITIVE_INFINITY, trigonometricPart1.calculateTg(PI/2.0));
+        assertEquals(Double.NEGATIVE_INFINITY, trigonometricPart1.calculateTg(-PI/2.0));
     }
 
     @ParameterizedTest
@@ -99,8 +99,8 @@ public class CalculatorTest {
     @Test
     void cscNanTest(){
         TrigonometricPart trigonometricPart1 = new TrigonometricPart(10e-300);
-        assertEquals(Double.NaN, trigonometricPart1.calculateCsc(PI));
+        assertEquals(Double.POSITIVE_INFINITY, trigonometricPart1.calculateCsc(PI));
         assertEquals(Double.POSITIVE_INFINITY, trigonometricPart1.calculateCsc(0.0));
-        assertEquals(Double.NaN, trigonometricPart1.calculateCsc(-PI));
+        assertEquals(Double.NEGATIVE_INFINITY, trigonometricPart1.calculateCsc(-PI));
     }
 }

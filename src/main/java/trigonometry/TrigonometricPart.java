@@ -28,6 +28,13 @@ public class TrigonometricPart {
     }
 
     public double calculateSin(double x) {
+        x %= (2 * Math.PI);
+        if(x % Math.PI == 0)
+            return x >= 0 ? 0.0 : -0.0;
+
+        if(x < -Math.PI)
+            x += 2 * Math.PI;
+
         double result = 0.0;
         double last = 100;
 
@@ -60,7 +67,7 @@ public class TrigonometricPart {
     }
 
     public double calculateTg(double x){
-        return  calculateSin(x) / Math.sqrt(1 - Math.pow(calculateSin(x), 2));
+        return  calculateSin(x) / calculateSin(x + Math.PI / 2);
     }
 
     public double calculateSec(double x) {

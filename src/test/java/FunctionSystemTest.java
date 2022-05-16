@@ -20,7 +20,7 @@ public class FunctionSystemTest {
 
     @BeforeAll
     void init(){
-        double accuracy = 0.001;
+        double accuracy = 0.0001;
         this.functionSystem = new FunctionSystem(
                 new TrigonometricPart(accuracy), new LogarithmicPart(accuracy));
     }

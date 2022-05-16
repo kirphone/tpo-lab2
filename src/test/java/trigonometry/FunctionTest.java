@@ -14,7 +14,7 @@ public class FunctionTest {
 
     private TrigonometricPart trigonometricPart;
 
-    private static final double ACCURACY = 0.001;
+    private static final double ACCURACY = 0.0001;
     private final double DELTA = 0.01;
 
     private final CSVLogger logger = new CSVLogger("trigonometry/sin-results.csv", -7.0, 0.0, 0.5);
@@ -29,10 +29,10 @@ public class FunctionTest {
     @CsvFileSource(resources = "/trigonometry/trig.csv")
     @DisplayName("all are stubs")
     void allAreStubs(double x, double expectedResult) {
-        when(trigonometricPart.calculateSin(x)).thenReturn(Math.sin(x));
-        when(trigonometricPart.calculateTg(x)).thenReturn(Math.tan(x));
-        when(trigonometricPart.calculateSec(x)).thenReturn(1 / Math.cos(x));
-        when(trigonometricPart.calculateCsc(x)).thenReturn(1 / Math.sin(x));
+        when(trigonometricPart.calculateSin(x)).thenReturn(prepareForStub(Math.sin(x)));
+        when(trigonometricPart.calculateTg(x)).thenReturn(prepareForStub(Math.tan(x)));
+        when(trigonometricPart.calculateSec(x)).thenReturn(prepareForStub(1 / Math.cos(x)));
+        when(trigonometricPart.calculateCsc(x)).thenReturn(prepareForStub(1 / Math.sin(x)));
 
         double actualResult = trigonometricPart.calculate(x);
         assertEquals(expectedResult, actualResult, DELTA);
@@ -47,7 +47,7 @@ public class FunctionTest {
     @CsvFileSource(resources = "/trigonometry/trig.csv")
     @DisplayName("sin(x) is a stub; all other aren't a stub")
     void sinIsStub(double x, double expectedResult) {
-        when(trigonometricPart.calculateSin(x)).thenReturn(Math.sin(x));
+        when(trigonometricPart.calculateSin(x)).thenReturn(prepareForStub(Math.sin(x)));
 
         double actualResult = trigonometricPart.calculate(x);
         assertEquals(expectedResult, actualResult, DELTA);
@@ -59,7 +59,7 @@ public class FunctionTest {
     @CsvFileSource(resources = "/trigonometry/trig.csv")
     @DisplayName("sec(x) is a stub; all other aren't a stub")
     void secIsStub(double x, double expectedResult) {
-        when(trigonometricPart.calculateSec(x)).thenReturn(1 / Math.cos(x));
+        when(trigonometricPart.calculateSec(x)).thenReturn(prepareForStub(1 / Math.cos(x)));
 
         double actualResult = trigonometricPart.calculate(x);
         assertEquals(expectedResult, actualResult, DELTA);
@@ -71,7 +71,7 @@ public class FunctionTest {
     @CsvFileSource(resources = "/trigonometry/trig.csv")
     @DisplayName("tan(x) is a stub; all other aren't a stub")
     void tanIsStub(double x, double expectedResult) {
-        when(trigonometricPart.calculateTg(x)).thenReturn(Math.tan(x));
+        when(trigonometricPart.calculateTg(x)).thenReturn(prepareForStub(Math.tan(x)));
 
         double actualResult = trigonometricPart.calculate(x);
         assertEquals(expectedResult, actualResult, DELTA);
@@ -83,7 +83,8 @@ public class FunctionTest {
     @CsvFileSource(resources = "/trigonometry/trig.csv")
     @DisplayName("csc(x) is a stub; all other aren't a stub")
     void cscIsStub(double x, double expectedResult) {
-        when(trigonometricPart.calculateCsc(x)).thenReturn(1 / Math.sin(x));
+
+        when(trigonometricPart.calculateCsc(x)).thenReturn(prepareForStub(1 / Math.sin(x)));
 
         double actualResult = trigonometricPart.calculate(x);
         assertEquals(expectedResult, actualResult, DELTA);
@@ -115,5 +116,13 @@ public class FunctionTest {
 
         logger.setFileName("trigonometry/function-results.csv");
         logger.log((x) -> trigonometricPart.calculate(x));
+    }
+
+    private double prepareForStub(double number){
+        if(Math.abs(number) < ACCURACY)
+            return 0;
+        if(Math.abs(number) > 1 / ACCURACY)
+            return number > 0 ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
+        return number;
     }
 }
